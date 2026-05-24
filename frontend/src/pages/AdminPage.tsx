@@ -19,7 +19,7 @@ interface AdminUser {
   id: number
   name: string
   email: string
-  role: 'admin' | 'manager' | 'employee'
+  role: 'admin' | 'manager' | 'employee' | 'viewer'
   is_active: boolean
   phone?: string
   department?: string
@@ -45,7 +45,8 @@ export default function AdminPage() {
     total: 0,
     admins: 0,
     managers: 0,
-    employees: 0
+    employees: 0,
+    viewers: 0
   })
 
   // Edit Modal
@@ -215,6 +216,7 @@ export default function AdminPage() {
               <option value="admin">Admin</option>
               <option value="manager">Manager</option>
               <option value="employee">Employee</option>
+              <option value="viewer">Viewer</option>
             </select>
           </div>
         </form>
@@ -245,7 +247,8 @@ export default function AdminPage() {
                   <td>
                     <span className={`badge capitalize ${
                       u.role === 'admin' ? 'badge-danger' :
-                      u.role === 'manager' ? 'badge-warning' : 'badge-primary'
+                      u.role === 'manager' ? 'badge-warning' :
+                      u.role === 'viewer' ? 'badge-info' : 'badge-primary'
                     }`}>
                       {u.role}
                     </span>
@@ -383,6 +386,7 @@ export default function AdminPage() {
                       disabled={editingUser.id === currentUser?.id}
                     >
                       <option value="employee">Employee</option>
+                      <option value="viewer">Viewer</option>
                       <option value="manager">Manager</option>
                       <option value="admin">Administrator</option>
                     </select>

@@ -12,6 +12,7 @@ import AnalyticsPage from '@/pages/AnalyticsPage'
 import ProductsPage from '@/pages/ProductsPage'
 import SalesPage from '@/pages/SalesPage'
 import ReportsPage from '@/pages/ReportsPage'
+import DatasetsPage from '@/pages/DatasetsPage'
 import AIAssistantPage from '@/pages/AIAssistantPage'
 import NotificationsPage from '@/pages/NotificationsPage'
 import SettingsPage from '@/pages/SettingsPage'
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="products" element={<ProductsPage />} />
         <Route path="sales" element={<SalesPage />} />
         <Route path="reports" element={<ReportsPage />} />
+        <Route path="datasets" element={<DatasetsPage />} />
         <Route path="ai-assistant" element={<AIAssistantPage />} />
         <Route path="notifications" element={<NotificationsPage />} />
         <Route path="settings" element={<SettingsPage />} />

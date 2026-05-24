@@ -10,9 +10,12 @@ import {
   User,
   Phone,
   Mail,
-  Eye
+  Eye,
+  Download,
+  Printer,
+  Send
 } from 'lucide-react'
-import { salesApi, productsApi } from '@/services/api'
+import { salesApi, productsApi, invoicesApi } from '@/services/api'
 import { useAuth } from '@/context/AuthContext'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 import toast from 'react-hot-toast'
@@ -249,6 +252,36 @@ export default function SalesPage() {
       fetchStats()
     } catch {
       toast.error('Insufficient permissions to cancel invoice.')
+    }
+  }
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.URL.revokeObjectURL(url)
+  }
+
+  const handleDownloadInvoicePdf = async (sale: Sale) => {
+    try {
+      const res = await invoicesApi.downloadPdf(sale.id)
+      downloadBlob(new Blob([res.data]), `${sale.invoice_number}_gst_invoice.pdf`)
+      toast.success('GST invoice PDF downloaded')
+    } catch {
+      toast.error('Invoice PDF download failed')
+    }
+  }
+
+  const handleEmailInvoice = async (sale: Sale) => {
+    try {
+      const res = await invoicesApi.email(sale.id)
+      toast.success(res.data.message || 'Invoice email queued')
+    } catch {
+      toast.error('Invoice email failed. Customer email may be missing.')
     }
   }
 
@@ -735,16 +768,34 @@ export default function SalesPage() {
               </div>
 
               {/* Actions */}
-              {isAdminOrManager && activeSale.status === 'completed' && (
-                <div className="mt-8 pt-4 border-t border-slate-500/10 flex justify-end">
+              <div className="mt-8 pt-4 border-t border-slate-500/10 flex flex-wrap justify-end gap-2">
+                <button
+                  onClick={() => handleDownloadInvoicePdf(activeSale)}
+                  className="btn-secondary flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs"
+                >
+                  <Download size={13} /> Download GST PDF
+                </button>
+                <button
+                  onClick={() => window.print()}
+                  className="btn-secondary flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs"
+                >
+                  <Printer size={13} /> Print Invoice
+                </button>
+                <button
+                  onClick={() => handleEmailInvoice(activeSale)}
+                  className="btn-secondary flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs"
+                >
+                  <Send size={13} /> Email Invoice
+                </button>
+                {isAdminOrManager && activeSale.status === 'completed' && (
                   <button
                     onClick={() => handleCancelSale(activeSale.id)}
                     className="btn-ghost flex items-center gap-1.5 text-red-400 hover:bg-red-500/10 hover:text-red-400 rounded-xl px-4 py-2 border border-red-500/20"
                   >
                     <Trash2 size={13} /> Void / Refund Invoice
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </motion.div>
           </div>
         )}

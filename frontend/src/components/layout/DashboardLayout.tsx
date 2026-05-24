@@ -5,24 +5,26 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BarChart3, Package, ShoppingCart, FileText,
   Bot, Bell, Settings, Users, ChevronLeft, ChevronRight,
-  Sun, Moon, LogOut, Search, Menu, X, Sparkles
+  Sun, Moon, LogOut, Search, Menu, X, Sparkles, Database
 } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useQuery } from '@tanstack/react-query'
 import { notificationsApi } from '@/services/api'
+import ExportToolbar from '@/components/ui/ExportToolbar'
 import clsx from 'clsx'
 
 const navItems = [
-  { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'manager', 'employee'] },
+  { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'manager', 'employee', 'viewer'] },
   { path: '/analytics', icon: BarChart3, label: 'Analytics', roles: ['admin', 'manager'] },
   { path: '/products', icon: Package, label: 'Products', roles: ['admin', 'manager'] },
   { path: '/sales', icon: ShoppingCart, label: 'Sales', roles: ['admin', 'manager', 'employee'] },
-  { path: '/reports', icon: FileText, label: 'Reports', roles: ['admin', 'manager'] },
+  { path: '/reports', icon: FileText, label: 'Reports', roles: ['admin', 'manager', 'viewer'] },
+  { path: '/datasets', icon: Database, label: 'Datasets', roles: ['admin'] },
   { path: '/ai-assistant', icon: Bot, label: 'AI Assistant', roles: ['admin', 'manager', 'employee'] },
-  { path: '/notifications', icon: Bell, label: 'Notifications', roles: ['admin', 'manager', 'employee'] },
+  { path: '/notifications', icon: Bell, label: 'Notifications', roles: ['admin', 'manager', 'employee', 'viewer'] },
   { path: '/admin', icon: Users, label: 'Admin', roles: ['admin'] },
-  { path: '/settings', icon: Settings, label: 'Settings', roles: ['admin', 'manager', 'employee'] },
+  { path: '/settings', icon: Settings, label: 'Settings', roles: ['admin', 'manager', 'employee', 'viewer'] },
 ]
 
 export default function DashboardLayout() {
@@ -280,6 +282,7 @@ export default function DashboardLayout() {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+          <ExportToolbar />
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 16 }}

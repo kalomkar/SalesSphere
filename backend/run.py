@@ -3,7 +3,7 @@ SalesSphere AI – Application Entry Point
 """
 import os
 from app import create_app, db
-from app.models import User, Category, Product, Sale, SaleItem, Notification
+from app.models import User, Category, Product, Sale, SaleItem, Notification, ImportedDataset
 
 app = create_app(os.getenv("FLASK_ENV", "development"))
 
@@ -18,6 +18,7 @@ def make_shell_context():
         "Sale": Sale,
         "SaleItem": SaleItem,
         "Notification": Notification,
+        "ImportedDataset": ImportedDataset,
     }
 
 

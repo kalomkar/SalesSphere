@@ -16,7 +16,7 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.Enum("admin", "manager", "employee"), default="employee")
+    role = db.Column(db.Enum("admin", "manager", "employee", "viewer"), default="employee")
     is_active = db.Column(db.Boolean, default=True)
     is_verified = db.Column(db.Boolean, default=False)
     avatar_url = db.Column(db.String(500), nullable=True)
@@ -254,5 +254,50 @@ class Notification(db.Model):
             "type": self.type,
             "is_read": self.is_read,
             "action_url": self.action_url,
+            "created_at": self.created_at.isoformat(),
+        }
+
+
+class ImportedDataset(db.Model):
+    __tablename__ = "imported_datasets"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    source = db.Column(db.String(100), default="upload")
+    file_name = db.Column(db.String(255), nullable=True)
+    file_path = db.Column(db.String(500), nullable=True)
+    file_type = db.Column(db.String(20), nullable=True)
+    row_count = db.Column(db.Integer, default=0)
+    column_count = db.Column(db.Integer, default=0)
+    columns_json = db.Column(db.Text, nullable=True)
+    field_map_json = db.Column(db.Text, nullable=True)
+    quality_report_json = db.Column(db.Text, nullable=True)
+    analysis_json = db.Column(db.Text, nullable=True)
+    status = db.Column(db.Enum("previewed", "imported", "failed"), default="imported")
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def _json(self, value):
+        import json
+        try:
+            return json.loads(value) if value else None
+        except Exception:
+            return None
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "source": self.source,
+            "file_name": self.file_name,
+            "file_type": self.file_type,
+            "row_count": self.row_count,
+            "column_count": self.column_count,
+            "columns": self._json(self.columns_json) or [],
+            "field_map": self._json(self.field_map_json) or {},
+            "quality_report": self._json(self.quality_report_json) or {},
+            "analysis": self._json(self.analysis_json) or {},
+            "status": self.status,
+            "created_by": self.created_by,
             "created_at": self.created_at.isoformat(),
         }

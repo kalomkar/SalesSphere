@@ -48,6 +48,8 @@ def create_app(config_name: str = "default") -> Flask:
     from app.routes.ai_assistant import ai_bp
     from app.routes.notifications import notifications_bp
     from app.routes.users import users_bp
+    from app.routes.datasets import datasets_bp
+    from app.routes.invoices import invoices_bp
 
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")
@@ -58,6 +60,8 @@ def create_app(config_name: str = "default") -> Flask:
     app.register_blueprint(ai_bp, url_prefix="/api/ai")
     app.register_blueprint(notifications_bp, url_prefix="/api/notifications")
     app.register_blueprint(users_bp, url_prefix="/api/users")
+    app.register_blueprint(datasets_bp, url_prefix="/api/datasets")
+    app.register_blueprint(invoices_bp, url_prefix="/api/invoices")
 
     # ── Health check ─────────────────────────────────────────────────────
     @app.route("/api/health")

@@ -140,6 +140,32 @@ export const reportsApi = {
     api.get('/reports/export/pdf', { params, responseType: 'blob' }),
 };
 
+export const datasetsApi = {
+  getAll: () => api.get('/datasets/'),
+  getSources: () => api.get('/datasets/sources'),
+  preview: (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    return api.post('/datasets/preview', form, { headers: { 'Content-Type': 'multipart/form-data' } });
+  },
+  importFile: (file: File, name: string, source = 'upload') => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('name', name);
+    form.append('source', source);
+    return api.post('/datasets/import', form, { headers: { 'Content-Type': 'multipart/form-data' } });
+  },
+  importSource: (source: string) => api.post('/datasets/import-source', { source }),
+  getAnalysis: (id: number) => api.get(`/datasets/${id}/analysis`),
+  exportJson: (id: number) => api.get(`/datasets/${id}/export/json`, { responseType: 'blob' }),
+};
+
+export const invoicesApi = {
+  getBySale: (saleId: number) => api.get(`/invoices/${saleId}`),
+  downloadPdf: (saleId: number) => api.get(`/invoices/${saleId}/pdf`, { responseType: 'blob' }),
+  email: (saleId: number) => api.post(`/invoices/${saleId}/email`),
+};
+
 // ── AI ────────────────────────────────────────────────────────────────────────
 export const aiApi = {
   chat: (message: string, history?: { role: string; content: string }[]) =>

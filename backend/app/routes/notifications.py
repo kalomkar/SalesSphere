@@ -135,4 +135,5 @@ def user_stats():
         "admins": User.query.filter_by(role="admin", is_active=True).count(),
         "managers": User.query.filter_by(role="manager", is_active=True).count(),
         "employees": User.query.filter_by(role="employee", is_active=True).count(),
+        "viewers": User.query.filter_by(role="viewer", is_active=True).count(),
     }), 200

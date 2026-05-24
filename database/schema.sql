@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   name VARCHAR(100) NOT NULL,
   email VARCHAR(150) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
-  role ENUM('admin', 'manager', 'employee') DEFAULT 'employee',
+  role ENUM('admin', 'manager', 'employee', 'viewer') DEFAULT 'employee',
   is_active BOOLEAN DEFAULT TRUE,
   is_verified BOOLEAN DEFAULT FALSE,
   avatar_url VARCHAR(500),

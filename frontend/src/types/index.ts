@@ -1,6 +1,6 @@
 // SalesSphere AI – TypeScript Type Definitions
 
-export type UserRole = 'admin' | 'manager' | 'employee';
+export type UserRole = 'admin' | 'manager' | 'employee' | 'viewer';
 
 export interface User {
   id: number;
